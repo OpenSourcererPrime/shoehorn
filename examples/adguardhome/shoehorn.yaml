@@ -1,0 +1,23 @@
+generate:
+  - name: AdGuardHome.yaml
+    path: /opt/adguardhome/conf
+    strategy: append
+    inputs:
+      - name: main
+        path: /configs/adguard/config.yaml
+      - name: users
+        path: /secrets/users/users.yaml
+process:
+  path: /opt/adguardhome/AdGuardHome
+  reload:
+    enabled: true
+    method: signal
+    signal: SIGHUP
+  args:
+    [
+      "--no-check-update",
+      "-c",
+      "/opt/adguardhome/conf/AdGuardHome.yaml",
+      "-w",
+      "/opt/adguardhome/work",
+    ]

@@ -1,0 +1,6 @@
+coverage.out
+coverage.out.tmp
+coverage.xml
+report.xml
+bin/
+build/
