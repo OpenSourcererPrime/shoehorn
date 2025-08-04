@@ -29,7 +29,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: "1.24.2"
-      - run: go test -v -cover
+      - run: make test
   build:
     name: Build binary
     runs-on: "ubuntu-latest"
