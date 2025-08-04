@@ -41,6 +41,10 @@ test: gotestsum gocover-cobertura ## Run tests.
 .PHONY: build
 build: $(BUILD_DIR)/$(PROJECT_NAME) ## Build manager binary.
 
+.PHONY: lint
+lint: golangci-lint ## Run golangci-lint against code.
+	$(GOBIN)/golangci-lint run --timeout 5m
+
 $(BUILD_DIR)/$(PROJECT_NAME): $(BUILD_DIR) $(SOURCES) ## Create build directory.
 	CGO_ENBALED=0 go build -o $(BUILD_DIR)/$(PROJECT_NAME) main.go
 
@@ -50,6 +54,7 @@ $(BUILD_DIR):
 ##@ Tool Dependencies
 GOTESTSUM_VERSION ?= v1.12.1
 GOCOVER_COBERTURA_VERSION ?= v1.3.0
+GOLANGCI_LINT_VERSION ?= v2.3.1
 
 .PHONY: gotestsum
 gotestsum: ## Install gotestsum
@@ -59,3 +64,6 @@ gotestsum: ## Install gotestsum
 gocover-cobertura: ## Install gocover-cobertura
 	GOBIN=$(GOBIN) go install github.com/boumenot/gocover-cobertura@$(GOCOVER_COBERTURA_VERSION)
 
+.PHONY: golangci-lint
+golangci-lint:
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(GOBIN) $(GOLANGCI_LINT_VERSION)
