@@ -55,9 +55,9 @@ The entrypoint is designed to replace the original entrypoint of a container.
 
 ```dockerfile
 FROM your-base-image
-COPY entrypoint /entrypoint/bin/entrypoint
-COPY config.yaml /entrypoint/config/config.yaml
-ENTRYPOINT ["/entrypoint"]
+COPY shoehorn /shoehorn/shoehorn
+COPY shoehorn.yaml /shoehorn/shoehorn.yaml
+ENTRYPOINT ["/shoehorn/shoehorn", "/shoehorn/shoehorn.yaml"]
 ```
 
 Any arguments after the config file will be forwarded to the managed process in addition to the args specified in the config.
@@ -72,15 +72,7 @@ The `append` strategy simply concatenates all input files, preserving their orde
 
 The `template` strategy uses Go's text/template package to render a template file. Each input file's content is made available as a variable in the template, using the name specified in the configuration.
 
-Example template:
-
-```
-# Server configuration
-{{.`server-config`}}
-
-# SSL certificates
-{{.`ssl-certs`}}
-```
+- [ ] Add template examples
 
 ## Process Reload Methods
 
@@ -90,21 +82,10 @@ The `restart` method completely stops and restarts the managed process when conf
 
 ### Signal Method
 
-The `signal` method sends a specified signal (e.g., SIGHUP) to the managed process, allowing it to reload its configuration without restarting.
+The `signal` method sends a specified signal (e.g., `SIGHUP`) to the managed process, allowing it to reload its configuration without restarting.
 
 ## Building
 
 This project is built with `make`. See either `make help` or check the `Makefile` for additional info.
 
 To compile the binary run `make build`. The compiled binary will be at `build/shoehorn`
-
-```bash
-make build
-```
-
-## Example Use Cases
-
-- Generate Nginx configuration by combining multiple site configs
-- Combine Kubernetes manifests from different sources
-- Template together database configuration with credentials from a secrets file
-- Watch for changes in ConfigMaps and Secrets in Kubernetes deployments
