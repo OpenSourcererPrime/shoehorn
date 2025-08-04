@@ -32,9 +32,9 @@ vet: ## Run go vet against code.
 
 .PHONY: test
 test: gotestsum gocover-cobertura ## Run tests.
-	gotestsum --junitfile report.xml --format testname -- -coverprofile=coverage.out.tmp ./...
+	$(GOBIN)/gotestsum --junitfile report.xml --format testname -- -coverprofile=coverage.out.tmp ./...
 	grep -v "mocks/" coverage.out.tmp > coverage.out
-	gocover-cobertura < coverage.out > coverage.xml
+	$(GOBIN)/gocover-cobertura < coverage.out > coverage.xml
 
 ##@ Build
 
